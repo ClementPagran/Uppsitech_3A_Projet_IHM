@@ -79,7 +79,7 @@ size(800,600);
 
 void draw() {
   background(0);
-  println("MAE : " + mae + " indice forme active ; " + indice_forme);
+  //println("MAE : " + mae + " indice forme active ; " + indice_forme);
   switch (mae) {
     case INITIAL:  // Etat INITIAL
       background(255);
@@ -88,14 +88,33 @@ void draw() {
       text("click pour sélectionner un objet et click pour sa nouvelle position", 50,80);
       passageAct();
       break;
+      
+    case ATTENTE_ACTION:
+      passageAct();
+    break;
     
     case CREER:
+      passageForme();
+      affiche("Etat CREER");
+    break;
+    
     case DEPLACER:
+      delay(1000);
+      mae= FSM.INITIAL;
+    break;
+    
+    case CREATION_FORME:
+      affiche("Etat CREATION_FORME");
+      println("Fin de l'action");
+      clrvar();
+      mae= FSM.ATTENTE_ACTION;
+    break;
+    
     case SELECTION_FORME: 
     case DEPLACER_FORMES_SELECTION:
     case DEPLACER_FORMES_DESTINATION: 
     case MODIF_COULEUR:
-      affiche();
+      affiche("");
       break;   
       
     default:
@@ -104,33 +123,64 @@ void draw() {
 }
 
 // fonction d'affichage des formes m
-void affiche() {
-  background(255);
+void affiche(String msg) {
+  text(msg, 50,80);
   /* afficher tous les objets */
   for (int i=0;i<formes.size();i++) // on affiche les objets de la liste
     (formes.get(i)).update();
 }
 
+void clrvar() {
+  act="";
+  lieu="";
+  forme="";
+  coul="";
+  loca=""; 
+}
+
 void passageAct() {
-  int val=0;
+  char val='z';
   if(act.equals("CREATE ")){
-    val=1;
+    val='c';
   }
   if(act.equals("MOVE ")){
-    val=2;
+    val='m';
   }
   switch (val) {
-    case 1:
+    case 'c':
       mae= FSM.CREER;
     break;
     
-    case 2:
+    case 'm':
       mae= FSM.DEPLACER;
     break;
     
     default:
-      println("Aucune action reconnu");
     break;
+  }
+}
+
+void passageForme() {
+  if(forme.equals("RECTANGLE ")){
+      Point p = new Point(mouseX,mouseY);
+      Forme f= new Rectangle(p);
+      formes.add(f);
+      mae=FSM.CREATION_FORME;
+  }
+  else if(forme.equals("TRIANGLE ")){
+      Point p = new Point(mouseX,mouseY);
+      Forme f1= new Triangle(p);
+      formes.add(f1);
+      mae=FSM.CREATION_FORME;
+  }
+  else if(forme.equals("CIRCLE ")){
+      Point p = new Point(mouseX,mouseY);
+      Forme f2= new Cercle(p);
+      formes.add(f2);
+      mae=FSM.CREATION_FORME;
+  }
+  else {
+    println("Aucune forme donnée");
   }
 }
 
@@ -180,21 +230,24 @@ void keyPressed() {
   Point p = new Point(mouseX,mouseY);
   switch(key) {
     case 'r':
+      forme = "RECTANGLE ";
       Forme f= new Rectangle(p);
       formes.add(f);
-      mae=FSM.MODIF_COULEUR;
+      mae=FSM.CREATION_FORME;
       break;
       
     case 'c':
+    forme = "CERCLE ";
       Forme f2=new Cercle(p);
       formes.add(f2);
-      mae=FSM.MODIF_COULEUR;
+      mae=FSM.CREATION_FORME;
       break;
     
     case 't':
+    forme = "TRIANGLE ";
       Forme f3=new Triangle(p);
       formes.add(f3);
-       mae=FSM.MODIF_COULEUR;
+       mae=FSM.CREATION_FORME;
       break;  
     
     case 'm' : // move
