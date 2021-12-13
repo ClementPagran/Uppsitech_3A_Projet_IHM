@@ -12,12 +12,13 @@ PImage sketch_icon;
 color couleur;
 
 
-String act;
-String lieu;
-String forme;
-String coul;
-String loca;
-float confid;
+String act="";
+String lieu="";
+String forme="";
+String coul="";
+String loca="";
+float confid=0.0;
+boolean newMsg;
 
 
 
@@ -51,6 +52,7 @@ size(800,600);
         confid=float(confidstr);
         println("Confindence= "+confid);
         println("--------------------");
+        newMsg=true;
         
         try {
           bus.sendMsg("Moteur_de_fusion: " + "act="+act+" lieu="+lieu+" forme="+forme+" coul"+coul+" loca"+loca+" confid"+confidstr);
@@ -77,15 +79,18 @@ size(800,600);
 
 void draw() {
   background(0);
-  //println("MAE : " + mae + " indice forme active ; " + indice_forme);
+  println("MAE : " + mae + " indice forme active ; " + indice_forme);
   switch (mae) {
     case INITIAL:  // Etat INITIAL
       background(255);
       fill(0);
       text("Etat initial (c(ercle)/r(ectangle)/t(riangle) pour créer la forme à la position courante)", 50,50);
       text("click pour sélectionner un objet et click pour sa nouvelle position", 50,80);
+      passageAct();
       break;
-      
+    
+    case CREER:
+    case DEPLACER:
     case SELECTION_FORME: 
     case DEPLACER_FORMES_SELECTION:
     case DEPLACER_FORMES_DESTINATION: 
@@ -104,6 +109,29 @@ void affiche() {
   /* afficher tous les objets */
   for (int i=0;i<formes.size();i++) // on affiche les objets de la liste
     (formes.get(i)).update();
+}
+
+void passageAct() {
+  int val=0;
+  if(act.equals("CREATE ")){
+    val=1;
+  }
+  if(act.equals("MOVE ")){
+    val=2;
+  }
+  switch (val) {
+    case 1:
+      mae= FSM.CREER;
+    break;
+    
+    case 2:
+      mae= FSM.DEPLACER;
+    break;
+    
+    default:
+      println("Aucune action reconnu");
+    break;
+  }
 }
 
 
