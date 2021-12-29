@@ -28,6 +28,10 @@
 			<item> dessiner <tag> out = "CREATE" </tag></item>
 			<item> tracer <tag> out = "CREATE" </tag></item>
 
+			<item> changer couleur<tag> out = "COLOR" </tag></item>
+			<item> modifier couleur<tag> out = "COLOR" </tag></item>
+			<item> couleur<tag> out = "COLOR" </tag></item>
+
 			<item> supprimer <tag> out = "DELETE" </tag></item>
 			<item> effacer <tag> out = "DELETE" </tag></item>
 			
@@ -66,7 +70,7 @@
 			<item> rouge <tag> out = "RED" </tag></item>
 			<item> orange <tag> out = "ORANGE" </tag></item>
 			<item> jaune <tag> out = "YELLOW" </tag></item>
-			<item> vert <tag> out = "GRREN" </tag></item>
+			<item> vert <tag> out = "GREEN" </tag></item>
 			<item> bleu <tag> out = "BLUE" </tag></item>
 			<item> violet <tag> out = "PURPLE" </tag></item>
 			<item> noir <tag> out = "DARK" </tag></item>
